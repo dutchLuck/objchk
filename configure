@@ -2,7 +2,9 @@
 #
 # C O N F I G U R E
 #
-# configure last edited on Tue Apr 16 13:14:14 2024 
+# configure last edited on Thu Jun 13 22:40:49 2024 
+#
+# This script writes a Makefile
 #
 NAME=objchk
 NAME1=config
