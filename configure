@@ -1,0 +1,74 @@
+#! /bin/bash
+#
+# C O N F I G U R E
+#
+# configure last edited on Tue Apr 16 13:14:14 2024 
+#
+NAME=objchk
+NAME1=config
+NAME2=genFun
+NAME3=intel
+#
+OP_FILE_NAME=Makefile
+COMPILER=cc
+OPTIONS="-Wall -pedantic"
+LNK_OPTIONS=""
+TRGT=$NAME
+SRC=$NAME.c
+SRC1=$NAME1.c
+SRC2=$NAME2.c
+SRC3=$NAME3.c
+OBJ=$NAME.o
+OBJ1=$NAME1.o
+OBJ2=$NAME2.o
+OBJ3=$NAME3.o
+HDR1=$NAME1.h
+HDR2=$NAME2.h
+HDR3=$NAME3.h
+#
+# echo $OSTYPE
+#
+if [[ "$OSTYPE" == "cygwin" ]] ; then
+  TRGT=$NAME.exe
+elif [[ "$OSTYPE" == "msys" ]] ; then
+  TRGT=$NAME.exe
+  COMPILER=gcc
+  LNK_OPTIONS="-static"
+fi
+#
+echo "$TRGT: $OBJ $OBJ1 $OBJ2 $OBJ3" > $OP_FILE_NAME
+echo -e "\t$COMPILER -o "'$@ $^' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "$OBJ: $SRC $HDR1 $HDR2" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -c -UDEBUG "'$<' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "$OBJ1: $SRC1 $HDR1 $HDR2" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -c -UDEBUG "'$<' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "$OBJ2: $SRC2 $HDR2" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -c -UDEBUG "'$<' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "$OBJ3: $SRC3 $HDR1 $HDR2 $HDR3" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -c -UDEBUG "'$<' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT $NAME.o $NAME1.o $NAME2.o $NAME3.o" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "debug: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -DDEBUG -g -o $TRGT $SRC $SRC1 $SRC2 $SRC3 $LNK_OPTIONS" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
