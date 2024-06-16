@@ -62,7 +62,7 @@ void  usage( struct config *  opt, char *  exeName )  {
 void  initConfiguration ( struct config *  opt )  {
   opt->a.active = FALSE;
   opt->a.optID = "-a";
-  opt->a.helpStr = "...... enable address output mode";
+  opt->a.helpStr = "...... disable address output mode";
 
   opt->A.active = FALSE;
   opt->A.optID = "-A";
