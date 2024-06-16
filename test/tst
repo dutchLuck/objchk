@@ -11,38 +11,47 @@ EXE=objchk
 TEN_PLUSS=++++++++++
 #
 # Test if no options mode has any sensitivity to file length
-echo "\n${TEN_PLUSS} $EXE wikipedia.hex  +++Small valid file, no options check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE wikipedia.hex  +++Small valid file, no options check${TEN_PLUSS}"
 ../$EXE wikipedia.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file wikipedia.hex, no options check${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} $EXE -aAv wikipedia.hex +++Small file, no address, no ascii and verbose options check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE -aAv wikipedia.hex +++Small file, no address, no ascii and verbose options check${TEN_PLUSS}"
 ../$EXE -a -v wikipedia.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for small file, no address, no ascii and verbose options check${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} $EXE -w24 extraChrs.hex +++File with address discontinuity and extra spaces check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE -w24 extraChrs.hex +++File with address discontinuity and extra spaces check${TEN_PLUSS}"
 ../$EXE -w24 extraChrs.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for File with address discontinuity and extra characters${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} $EXE truncated1.hex  +++Missing checksum byte check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE truncated1.hex  +++Missing checksum byte check${TEN_PLUSS}"
 ../$EXE truncated1.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for File truncated1.hex${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} $EXE truncated2.hex  +++Incorrect length record check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE truncated2.hex  +++Incorrect length record check${TEN_PLUSS}"
 ../$EXE truncated2.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for File truncated2.dat${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} $EXE truncated3.hex  +++Incorrect length record check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE truncated3.hex  +++Incorrect length record check${TEN_PLUSS}"
 ../$EXE truncated3.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for File truncated3.da${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} $EXE checkSumErr.hex  +++Checksum Error record check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE checkSumErr.hex  +++Checksum Error record check${TEN_PLUSS}"
 ../$EXE checkSumErr.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for Checksum Error File check${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} $EXE wikipedia.hex checkSumErr.hex  +++2 Files one of which has checksum Error check${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} $EXE wikipedia.hex checkSumErr.hex  +++2 Files one of which has checksum Error check${TEN_PLUSS}"
 ../$EXE wikipedia.hex checkSumErr.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for 2 Files one of which has checksum Error File check${TEN_PLUSS}"
 #
-echo "\n${TEN_PLUSS} cat wikipedia.hex | $EXE  +++Test pipe into stdin${TEN_PLUSS}"
+echo ""
+echo "${TEN_PLUSS} cat wikipedia.hex | $EXE  +++Test pipe into stdin${TEN_PLUSS}"
 cat wikipedia.hex | ../$EXE
 echo "${TEN_PLUSS} Shell got Return code number $? for Test pipe into stdin${TEN_PLUSS}"
