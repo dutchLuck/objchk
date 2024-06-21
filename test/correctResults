@@ -23,9 +23,9 @@ Info: End of File "wikipedia.hex" (183 data bytes processed)
 ++++++++++ Shell got Return code number 0 for small file, no address, no ascii and verbose options check++++++++++
 
 ++++++++++ objchk -w24 extraChrs.hex +++File with address discontinuity and extra spaces check++++++++++
-f800 30 8d 67 be 1f 10 1f 8b 97 9d 33 84 31 8c 35 ef 81 c6 16 34 04 1f 20 e3 0.g.......3.1.5....4.. .
-f818 a1 ed 81 6a e4 26 f6 c6 0d a6 a0 a7 80 5a 26 f9 31 8d f7 d4 8e 20 fe ac ...j.&.......Z&.1.... ..
-f830 a1 26 02 ad a4 35 84 32 8d 67 16 8d c3 4f 1f 8b 3f 08 20 f9 01 58 02 92 .&...5.2.g...O..?. ..X..
+f800 30 8d 67 be 1f 10 1f 8b 97 9d 33 84 31 8c 35 ef 81 c6 16 34 04 1f 20 e3 0.g.......3.1.5....4....
+f818 a1 ed 81 6a e4 26 f6 c6 0d a6 a0 a7 80 5a 26 f9 31 8d f7 d4 8e 20 fe ac ...j.&.......Z&.1.......
+f830 a1 26 02 ad a4 35 84 32 8d 67 16 8d c3 4f 1f 8b 3f 08 20 f9 01 58 02 92 .&...5.2.g...O..?....X..
 f848 02 90 02 8e 02 70 02 8a 00 45 02 2b ff e3 02 91 02 84 02 97 02 8b 02 94 .....p...E.+............
 f860 02 91 03 9b 02 b8 02 d3 02 c0 67 92 04 7e 01 2d be 00 00 05 00 00 e0 00 ..........g..~.-........
 f878 00 00 00 00 39 01 94 01 b1 01 cb 01 c3 01 75 01 73 01 c0 01 79 00 55 01 ....9.........u.s...y.U.
@@ -36,13 +36,36 @@ f8d8 0d ad 9d 66 f9 ad 9d 66 fb 30 8c e5 3f 03 9e f6 27 0d 6f 02 6f 03 cc 01 ...
 f8f0 a6 a7 01 e7 84 6f 01 3f 06 17 06 46 2a 0c 50 d7 .....o.?...F*.P.
 fa20 26 17 81 0d 26 04 86 0a 8d c2 0d f4 26 0b a6 61 30 8c 09 81 0a 27 0f 8d &...&.......&..a0....'..
 fa38 b3 0c 90 3b 04 30 8c fc 86 0d 8d a8 86 0a 8d a4 a6 80 81 04 26 f8 8d 1e ...;.0..............&...
-fa50 8d 06 1f a9 e7 e4 20 e1 8d 18 24 05 81 18 26 02 ...... ...$...&.
+fa50 8d 06 1f a9 e7 e4 20 e1 8d 18 24 05 81 18 26 02 ..........$...&.
 ++++++++++ Shell got Return code number 0 for File with address discontinuity and extra characters++++++++++
+
+++++++++++ objchk -s extraChrs.hex +++File with spaces shown in the ASCII column check++++++++++
+f800 30 8d 67 be 1f 10 1f 8b 97 9d 33 84 31 8c 35 ef 0.g.......3.1.5.
+f810 81 c6 16 34 04 1f 20 e3 a1 ed 81 6a e4 26 f6 c6 ...4.. ....j.&..
+f820 0d a6 a0 a7 80 5a 26 f9 31 8d f7 d4 8e 20 fe ac .....Z&.1.... ..
+f830 a1 26 02 ad a4 35 84 32 8d 67 16 8d c3 4f 1f 8b .&...5.2.g...O..
+f840 3f 08 20 f9 01 58 02 92 02 90 02 8e 02 70 02 8a ?. ..X.......p..
+f850 00 45 02 2b ff e3 02 91 02 84 02 97 02 8b 02 94 .E.+............
+f860 02 91 03 9b 02 b8 02 d3 02 c0 67 92 04 7e 01 2d ..........g..~.-
+f870 be 00 00 05 00 00 e0 00 00 00 00 00 39 01 94 01 ............9...
+f880 b1 01 cb 01 c3 01 75 01 73 01 c0 01 79 00 55 01 ......u.s...y.U.
+f890 7d 02 56 01 d1 6a 8d 66 f7 17 02 25 ee 6a 33 5f }.V..j.f...%.j3_
+f8a0 0d fb 26 11 17 06 9b 50 5a 2b 0a 11 a3 a1 26 f8 ..&....PZ+....&.
+f8b0 ef 6a 16 02 1e 0f fb 37 06 c1 0b 10 22 02 0f ef .j.....7...."...
+f8c0 6a 58 33 8c b8 ec c5 6e cb 41 53 53 49 53 54 30 jX3....n.ASSIST0
+f8d0 39 04 10 df 97 6d 61 26 0d ad 9d 66 f9 ad 9d 66 9....ma&...f...f
+f8e0 fb 30 8c e5 3f 03 9e f6 27 0d 6f 02 6f 03 cc 01 .0..?...'.o.o...
+f8f0 a6 a7 01 e7 84 6f 01 3f 06 17 06 46 2a 0c 50 d7 .....o.?...F*.P.
+fa20 26 17 81 0d 26 04 86 0a 8d c2 0d f4 26 0b a6 61 &...&.......&..a
+fa30 30 8c 09 81 0a 27 0f 8d b3 0c 90 3b 04 30 8c fc 0....'.....;.0..
+fa40 86 0d 8d a8 86 0a 8d a4 a6 80 81 04 26 f8 8d 1e ............&...
+fa50 8d 06 1f a9 e7 e4 20 e1 8d 18 24 05 81 18 26 02 ...... ...$...&.
+++++++++++ Shell got Return code number 0 for File with spaces shown in the ASCII column++++++++++
 
 ++++++++++ objchk truncated1.hex  +++Missing checksum byte check++++++++++
 Error: Input line ":20F820000DA6A0A7805A26F9318DF7D48E20FEACA12602ADA43584328D67168DC34F1F8BC" is too short (74) - needs 75 characters
 f800 30 8d 67 be 1f 10 1f 8b 97 9d 33 84 31 8c 35 ef 0.g.......3.1.5.
-f810 81 c6 16 34 04 1f 20 e3 a1 ed 81 6a e4 26 f6 c6 ...4.. ....j.&..
+f810 81 c6 16 34 04 1f 20 e3 a1 ed 81 6a e4 26 f6 c6 ...4.......j.&..
 ++++++++++ Shell got Return code number 1 for File truncated1.hex++++++++++
 
 ++++++++++ objchk truncated2.hex  +++Incorrect length record check++++++++++

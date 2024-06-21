@@ -6,7 +6,7 @@
  */
 
 #include <stdio.h>		/* printf() */
-#include <stdlib.h>		/* atoi() malloc() free() atol() strtod() strtol() random() */
+#include <stdlib.h>		/* atoi() malloc() free() atol() strtod() strtol() rand() */
 #include <limits.h>		/* LONG_MIN LONG_MAX INT_MIN strtol() */
 #include <ctype.h>		/* touppper() */
 #include "genFun.h"
@@ -54,7 +54,7 @@ void  fillByteArrayWithPseudoRandomData( unsigned char *  array, int  arraySize 
 
 	intPtr = ( int * ) array;
 	for( cnt = 0; cnt < arraySize; )  {
-		pseudoRandomInt = ( int )( random() & 0xffffffff );	/* use of random() is far from perfect  */
+		pseudoRandomInt = ( int )( rand() & 0xffffffff );	/* use of random() is far from perfect  */
 		if(( cnt + sizeof( int ) ) <= arraySize )  {	/* will a whole int fit or are we too close to full */
 			*intPtr++ = pseudoRandomInt;	/* put an pseudo random integer into the array */
 			cnt += sizeof( int );

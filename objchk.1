@@ -1,0 +1,80 @@
+.TH OBJCHK "1" "June 2024" "objchk 0.1.0" "User Commands"
+.SH NAME
+.I objchk
+\- address hex ascii output of intel object format records
+.SH SYNOPSIS
+.B objchk
+\f\ -h\fR
+.br
+.B objchk
+[\fI\,options\/\fR] [\fI\,file1 \/\fR[\fI\,file2\/\fR ... [\fI\,fileN\/\fR]]]
+.SH DESCRIPTION
+.PP
+.I objchk
+outputs intel format object files or standard input, writing to standard output
+or a file if the -o option is used. The normal format of the output is lines with
+three columns. The first column is an address, the second is a hexadecimal
+representation of object bytes and the third is an ASCII representation of the
+bytes dependent on whether they fall in the range of printable ASCII characters.
+.SH OPTIONS
+.TP
+\fB\-a\fR
+Suppress output of the address column
+.TP
+\fB\-A\fR
+Suppress output of the ASCII column
+.TP
+\fB\-D\fR
+Debug information output enable.
+.TP
+\fB\-h\fR
+Output help and usage information and exit.
+.TP
+\fB\-o \fI\,output_file\/\fR
+Dumps to output file \fI\,output_file\/\fR instead of standard output.
+.TP
+\fB\-s\fR
+Classify the space (SP) character as printable in the ASCII column.
+.TP
+\fB\-v\fR
+Verbose output enable option.
+.TP
+\fB\-w \fI\,bytes_per_line\/\fR
+Set bytes processed in each line specified by decimal number \fI\,bytes_per_line\/\fR.
+.PP
+.SH "EXIT STATUS"
+The objchk utility returns 0 on success, and greater than zero if an error occurs.
+.PP
+.SH EXAMPLES
+\fBobjchk a_local_file.hex\fR
+.br
+dump a local intel hex object format file in lines of three columns to the standard output.
+.PP
+\fBobjchk -o out.csv a_local_file.hex\fR
+.br
+dump a local intel hex object format file to an output file named "out.csv" in pseudo comma separated variable format.
+.PP
+\fBobjchk -v a_local_file.hex\fR
+.br
+dump a local file and output more detail.
+.PP
+\fBobjchk -s local_file1 local_file2\fR
+.br
+Allow comparison of two local files with space characters in the ASCII column.
+.PP
+.SH AUTHOR
+Written by Owen Holland.
+.PP
+.SH "REPORTING BUGS"
+Report objchk bugs as issues on https://github.com/dutchLuck/objchk/issues
+.SH LICENSE
+Released under the MIT License (https://github.com/dutchLuck/objchk/blob/master/LICENSE). 
+.br
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+.PP
+.SH "SEE ALSO"
+od(1)
+.br
+More documentation at: <https://github.com/dutchLuck/objchk>
+.PP

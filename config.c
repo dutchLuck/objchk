@@ -1,7 +1,7 @@
 /*
- * C O N F I G . c
+ * C O N F I G . C
  *
- * Last Modified on Sun May 26 16:06:39 2024
+ * Last Modified on Fri Jun 21 22:49:06 2024
  *
  */
 
@@ -48,12 +48,13 @@ int  configureDoubleOption( struct optDbl *  dblStructPtr, char *  dblString ) {
 
 void  usage( struct config *  opt, char *  exeName )  {
   printf( "Usage:\n");
-  printf( " %s [-a] [-A] [-D] [-h] [-o TXT] [-v] [-w INT][ fileName1 .. [ fileNameX ]]\n", exeName );
+  printf( " %s [-a] [-A] [-D] [-h] [-o TXT] [-s] [-v] [-w INT][ fileName1 .. [ fileNameX ]]\n", exeName );
   printf( " %s %s\n", opt->a.optID, opt->a.helpStr );
   printf( " %s %s\n", opt->A.optID, opt->A.helpStr );
   printf( " %s %s\n", opt->D.optID, opt->D.helpStr );
   printf( " %s %s\n", opt->h.optID, opt->h.helpStr );
   printf( " %s %s\n", opt->o.optID, opt->o.helpStr );
+  printf( " %s %s\n", opt->s.optID, opt->s.helpStr );
   printf( " %s %s\n", opt->v.optID, opt->v.helpStr );
   printf( " %s %s\n", opt->w.optID, opt->w.helpStr );
 }
@@ -81,6 +82,10 @@ void  initConfiguration ( struct config *  opt )  {
   opt->o.helpStr = "TXT .. output the dump to an output file named \"TXT\" ";
   opt->o.optionStr = "";
 
+  opt->s.active = FALSE;
+  opt->s.optID = "-s";
+  opt->s.helpStr = "...... enable space as a printable character in the output";
+
   opt->v.active = FALSE;
   opt->v.optID = "-v";
   opt->v.helpStr = "...... enable more verbose information output";
@@ -106,6 +111,7 @@ int  setConfiguration ( int  argc, char *  argv[], struct config *  opt )  {
       case 'D': opt->D.active = TRUE; break;
       case 'h': opt->h.active = TRUE; break;
       case 'o': opt->o.active = TRUE; opt->o.optionStr = optarg; break;
+      case 's': opt->s.active = TRUE; break;
       case 'v': opt->v.active = TRUE; break;
       case 'w': configureIntegerOption( &opt->w, optarg ); break;
       case '?': {

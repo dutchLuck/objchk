@@ -125,7 +125,7 @@ void  printDataAsChr( struct config *  cfg, FILE *  ofp, unsigned char  dataBfr[
 
 	for( outIndx = (( outIndx + 1 ) & circMsk ); dataCnt-- > 0; outIndx = (( outIndx + 1 ) & circMsk )) {
 		chr = dataBfr[ outIndx ];
-		if(( chr >= ' ') && ( chr <= '~' ))  fprintf( ofp, "%c", chr );
+		if(( chr >= (cfg->s.active ? ' ' : '!')) && ( chr <= '~' ))  fprintf( ofp, "%c", chr );
 		else  fprintf( ofp, ".");
 	}
 }

@@ -2,7 +2,7 @@
 #
 # T S T
 #
-# tst last edited on Mon Jun 10 23:16:37 2024 
+# tst last edited on Fri Jun 21 23:26:28 2024 
 #
 # To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
 #  ./tst &> outputFile
@@ -25,6 +25,11 @@ echo ""
 echo "${TEN_PLUSS} $EXE -w24 extraChrs.hex +++File with address discontinuity and extra spaces check${TEN_PLUSS}"
 ../$EXE -w24 extraChrs.hex
 echo "${TEN_PLUSS} Shell got Return code number $? for File with address discontinuity and extra characters${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE -s extraChrs.hex +++File with spaces shown in the ASCII column check${TEN_PLUSS}"
+../$EXE -s extraChrs.hex
+echo "${TEN_PLUSS} Shell got Return code number $? for File with spaces shown in the ASCII column${TEN_PLUSS}"
 #
 echo ""
 echo "${TEN_PLUSS} $EXE truncated1.hex  +++Missing checksum byte check${TEN_PLUSS}"
