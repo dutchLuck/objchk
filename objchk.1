@@ -48,19 +48,23 @@ The objchk utility returns 0 on success, and greater than zero if an error occur
 .SH EXAMPLES
 \fBobjchk a_local_file.hex\fR
 .br
-dump a local intel hex object format file in lines of three columns to the standard output.
+read a local intel hex object format file and output lines of address, data and ASCII to standard output.
 .PP
-\fBobjchk -o out.csv a_local_file.hex\fR
+\fBcat file.hex | objchk -o out.txt\fR
 .br
-dump a local intel hex object format file to an output file named "out.csv" in pseudo comma separated variable format.
+read intel hex object format records from standard input and write output to a file named "out.txt".
 .PP
 \fBobjchk -v a_local_file.hex\fR
 .br
-dump a local file and output more detail.
+read a local file and output more detail to standard output.
 .PP
-\fBobjchk -s local_file1 local_file2\fR
+\fBobjchk -w 8 a_local_file.hex\fR
 .br
-Allow comparison of two local files with space characters in the ASCII column.
+read a local intel hex format file and output 8 data bytes per line to standard output.
+.PP
+\fBobjchk -s file1.hex file2.hex\fR
+.br
+Allow comparison of two intel hex format files and show space characters in the ASCII column output.
 .PP
 .SH AUTHOR
 Written by Owen Holland.
@@ -74,7 +78,17 @@ This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 .PP
 .SH "SEE ALSO"
-od(1)
+SRecord
 .br
-More documentation at: <https://github.com/dutchLuck/objchk>
+SRecord handles intel format records and it's documentation lists a large number of other formats that it handles.
+It has a long standing history of development and appears to have enthusiastic reviews.
+It has Microsoft Windows and as well as Linux versions available.
+The SRecord website has the following URL; -
+.br
+https://srecord.sourceforge.net
+.br
+Source code may be found on github (https://github.com/sierrafoxtrot/srecord),
+or on sourceforge (https://sourceforge.net/projects/srecord/)
+.PP
+More documentation on objchk at: <https://github.com/dutchLuck/objchk>
 .PP
