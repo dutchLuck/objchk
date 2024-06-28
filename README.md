@@ -6,7 +6,7 @@ Erasable Programmable Read Only Memory chip</a>
 and generally provides the executable binary to a microprocessor that is non-volatile
 in that it survives the power off state.
 
-This "objchk" code is anachronistic in that EPROMS and Microprocessors largely belong
+This "objchk" code is anachronistic in that EPROMS and Microprocessors belong
 to a bygone era. In those days Intel used "
 <a href="https://en.wikipedia.org/wiki/Intel_HEX">hex</a>" formatted information and
 Motorola used "
@@ -37,8 +37,8 @@ An example of the default output of objchk is; -
 0130 3f 01 56 70 2b 5e 71 2b 72 2b 73 21 46 01 34 21 ?.Vp+^q+r+s!F.4!
 %
 ```
-objchk is released under the MIT license and may be used at your own risk.
 
+## Help Information
 The objchk command has a number of options which are outlined in the useage information.
 Start the utility with the "-h" (help) option to see all the other options that are available; -
 ```
@@ -55,3 +55,15 @@ Usage:
 %
 ```
 The objchk utility exits with a return value of 0 on success and greater than zero if an error occurs.
+
+## License and Disclaimer
+objchk is released under the MIT license and must be used at your own risk.
+
+## See Also
+SRecord handles intel format records and it's documentation lists a large number of other formats that it handles.
+It has a long standing history of development and appears to have enthusiastic reviews.
+It has Microsoft Windows and as well as Linux versions available.
+The SRecord website has the following URL; -
+https://srecord.sourceforge.net
+Source code may be found on github (https://github.com/sierrafoxtrot/srecord),
+or on sourceforge (https://sourceforge.net/projects/srecord/)
