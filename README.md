@@ -1,6 +1,7 @@
 # objchk
-Check and ease human inspection of object files used to program microprocessor EPROMS.
-An EPROM is an 
+Check and ease human inspection of object files used to program
+<a href="https://en.wikipedia.org/wiki/Microprocessor">microprocessor</a>
+EPROMS. An EPROM is an 
 <a href="https://www.techtarget.com/whatis/definition/EPROM">
 Erasable Programmable Read Only Memory chip</a>
 and generally provides the executable binary to a microprocessor that is non-volatile
@@ -13,10 +14,12 @@ Motorola used "
 <a href="https://en.wikipedia.org/wiki/SREC_(file_format)">S19</a>"
 formatted information to allow code to be transferred by media such as
 <a href="https://en.wikipedia.org/wiki/Punched_tape">punched paper tape</a>.
-Such a paper tape could be punched by a device like a Teletype ASR (auto-send/receive)
-33 terminal from 110 Buad serial communication from a Main-frame or Mini computer.
+Such a paper tape could be punched by a device like a 
+<a href="https://en.wikipedia.org/wiki/Teletype_Model_33">Teletype ASR (auto-send/receive) 33 terminal</a>
+from 110 Buad serial communication from a Main-frame or
+<a href="https://en.wikipedia.org/wiki/Minicomputer">Minicomputer</a>.
 The reverse operation of reading the tape with an ASR 33 could then be used with a
-microprocessor development system or an EPROM programmer. Since both serial transmission
+microprocessor based system or an EPROM programmer. Since both serial transmission
 and the paper tape writing and reading process could result in incorrect information
 transfer both Intel and Motorola information formats provided (limited) error checking
 with a checksum incorporated into the format.
