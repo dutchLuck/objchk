@@ -1,7 +1,7 @@
 /*
  * C O N F I G . H
  *
- * Last Modified on Fri Jun 21 22:49:11 2024
+ * Last Modified on Wed Jul 31 13:26:36 2024
  *
  */
 
@@ -72,15 +72,17 @@ struct config {
   struct optFlg  A;
   struct optFlg  D;
   struct optFlg  h;
+  struct optFlg  i;
+  struct optFlg  m;
   struct optStr  o;
   struct optFlg  s;
   struct optFlg  v;
   struct optInt  w;
 };
 
-#define OPTIONS "aADho:svw:"
+#define OPTIONS "aADhimo:svw:"
 
-void  usage( struct config *  optStructPtr, char *  exeName );
+void  usage ( struct config *  optStructPtr, char *  exeName );
 void  initConfiguration ( struct config *  optStructPtr );
 int  setConfiguration ( int  argc, char *  argv[], struct config *  optStructPtr );
 

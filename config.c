@@ -1,7 +1,7 @@
 /*
  * C O N F I G . C
  *
- * Last Modified on Fri Jun 21 22:49:06 2024
+ * Last Modified on Wed Jul 31 13:25:15 2024
  *
  */
 
@@ -53,6 +53,8 @@ void  usage( struct config *  opt, char *  exeName )  {
   printf( " %s %s\n", opt->A.optID, opt->A.helpStr );
   printf( " %s %s\n", opt->D.optID, opt->D.helpStr );
   printf( " %s %s\n", opt->h.optID, opt->h.helpStr );
+  printf( " %s %s\n", opt->i.optID, opt->i.helpStr );
+  printf( " %s %s\n", opt->m.optID, opt->m.helpStr );
   printf( " %s %s\n", opt->o.optID, opt->o.helpStr );
   printf( " %s %s\n", opt->s.optID, opt->s.helpStr );
   printf( " %s %s\n", opt->v.optID, opt->v.helpStr );
@@ -76,6 +78,14 @@ void  initConfiguration ( struct config *  opt )  {
   opt->h.active = FALSE;
   opt->h.optID = "-h";
   opt->h.helpStr = "...... this help/usage information";
+
+  opt->i.active = FALSE;
+  opt->i.optID = "-i";
+  opt->i.helpStr = "...... expect intel object format - not implemented yet";
+
+  opt->m.active = FALSE;
+  opt->m.optID = "-m";
+  opt->m.helpStr = "...... expect motorola object format - not implemented yet";
 
   opt->o.active = FALSE;
   opt->o.optID = "-o";
@@ -110,6 +120,8 @@ int  setConfiguration ( int  argc, char *  argv[], struct config *  opt )  {
       case 'A': opt->A.active = TRUE; break;
       case 'D': opt->D.active = TRUE; break;
       case 'h': opt->h.active = TRUE; break;
+      case 'i': opt->i.active = TRUE; break;
+      case 'm': opt->m.active = TRUE; break;
       case 'o': opt->o.active = TRUE; opt->o.optionStr = optarg; break;
       case 's': opt->s.active = TRUE; break;
       case 'v': opt->v.active = TRUE; break;

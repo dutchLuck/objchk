@@ -1,7 +1,7 @@
 /*
  * G E N F U N . C
  *
- * genFun.c last edited Sat Dec  2 21:30:25 2023
+ * genFun.c last edited Wed Jul 31 13:21:50 2024
  * 
  */
 
@@ -310,4 +310,54 @@ int  convert4HexChrNibblesToInt( char *  hexChr )  {
 	if (( intChr1 = convert2HexChrNibblesToInt( hexChr )) < 0 )  return( -1 );
 	else if (( intChr2 = convert2HexChrNibblesToInt( hexChr + 2 )) < 0 )  return( -1 );
 	return( 256 * intChr1 + intChr2 );
+}
+
+/* The following Circular (Ring) buffer is an expedient version that sacrifices 1 data */
+/* storage location to allow an easy buffer full indication, even though when "full" */
+/* the buffer is actually 1 location short of completely full. The buffer must be a */
+/* power of two in size (e.g. 256 or 512 or 1024 or 2048 etc) for the AND mask to work. */
+
+int ringBffrFull( int  inIndx, int  outIndx ) {
+	return( inIndx == outIndx );
+}
+
+
+int ringBffrEmpty( int  inIndx, int  outIndx, int  ringMask ) {
+	return((( outIndx + 1 ) & ringMask ) == inIndx );
+}
+
+
+int  ringBffrUsed( int  inIndex, int  outIndex, int  ringMask )  {
+	int  diff;
+
+	if( inIndex == outIndex )  return( ringMask );	/* if equal then circular buffer is deemed to be full */
+	else if(( diff = ( inIndex - outIndex )) > 0 )  return( diff - 1 );
+	else return( diff + ringMask );
+}
+
+
+void  zeroRingBffr( unsigned char  data[], size_t  dataBufferSize )  {
+	for (size_t i = 0; i < dataBufferSize; i++ )
+		data[ i ] = ( unsigned char ) 0;
+}
+
+
+void  dumpRingBffr( unsigned char  data[], size_t  dataBufferSize )  {
+	for (size_t i = 0; i < dataBufferSize; i++)  {
+		if (( i % 32 ) == 0 )  fprintf( stdout, "\n%02x", data[ i ] );
+		else  fprintf( stdout, " %02x", data[ i ]);
+	}
+	fprintf( stdout, "\n\n" );
+}
+
+
+int  loadRingBffrWithBytesFromLineOfAsciiHex( char *  linePtr, int  byteCount,
+	unsigned char  ringBffr[], int *  inIndx, int *  outIndx, int  circMask ) {
+	int  i;
+
+	for ( i = 0; (! ringBffrFull( *inIndx, *outIndx )) && ( i < byteCount ); i++) {
+		ringBffr[ *inIndx ] = ( unsigned char )( convert2HexChrNibblesToInt( linePtr + i * 2 ) & 0xff );
+		*inIndx = ( *inIndx + 1 ) & circMask;
+	}
+	return( i );	/* return number of bytes loaded */
 }

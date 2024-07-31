@@ -1,7 +1,7 @@
 /*
  *  I N T E L . C
  *
- * last modified on Tue Jun 11 21:16:50 2024, by O.F.H.
+ * last modified on Wed Jul 31 13:22:02 2024, by O.F.H.
  *
  * Code to neatly list an Intel Hex format file
  * and check the checksums while doing the listing.
@@ -14,7 +14,7 @@
 #include <stdlib.h>	/* exit() */
 #include <ctype.h>	/* isspace() iscntrl() isalnum() */
 #include <string.h>	/* strlcpy() */
-#include "genFun.h"	/* convertHexChrNibbleToInt() */
+#include "genFun.h"	/* convertHexChrNibbleToInt(), ringBffrFull(), ringBffrEmpty() */
 #include "config.h"	/* */
 #include "intel.h"	/* RECORD_MARK */
 
@@ -47,42 +47,6 @@ void  printNewRecordTypeAddress( struct config *  cfg, FILE *  ofp, int  address
 }
 
 
-/* The following Circular (Ring) buffer is expedient version that sacrifices 1 data */
-/* storage location to allow an easy buffer full indication, even though when "full" */
-/* the buffer is actually 1 location short of completely full. The buffer must be a */
-/* power of to in size for the mask to work. */
-
-int ringBffrFull( int  inIndx, int  outIndx ) {
-	return( inIndx == outIndx );
-}
-
-
-int ringBffrEmpty( int  inIndx, int  outIndx, int  ringMask ) {
-	return((( outIndx + 1 ) & ringMask ) == inIndx );
-}
-
-
-int  loadByteRingBuffer( struct config *  cfg, char *  lnPtr, int  dtLen,
-	unsigned char  ringBffr[], int *  inIndx, int *  outIndx, int  circMask ) {
-	int  i;
-
-	for ( i = 0; (! ringBffrFull( *inIndx, *outIndx )) && ( i < dtLen ); i++) {
-		ringBffr[ *inIndx ] = ( unsigned char )( convert2HexChrNibblesToInt( lnPtr + i * 2 ) & 0xff );
-		*inIndx = ( *inIndx + 1 ) & circMask;
-	}
-	return( i );	/* return number of bytes loaded */
-}
-
-
-void  dumpRingBuffer( unsigned char  data[] )  {
-	for (size_t i = 0; i < D_BFR_SZ; i++)  {
-		if (( i % 32 ) == 0 )  fprintf( stdout, "\n%02x", data[ i ] );
-		else  fprintf( stdout, " %02x", data[ i ]);
-	}
-	fprintf( stdout, "\n\n" );
-}
-
-
 int  calcCheckSum( unsigned char  ringBffr[], int  inIndex, int  dataLen, int  circMask )  {
 	int  sum = 0;
 
@@ -92,21 +56,6 @@ int  calcCheckSum( unsigned char  ringBffr[], int  inIndex, int  dataLen, int  c
 		/* printf( "%d %d 0x%0x, 0x%0x\n", inIndex, dataLen, ringBffr[ inIndex ], sum ); */
 	}
 	return( sum );
-}
-
-
-void  zeroRingBuffer( unsigned char  data[] )  {
-	for (size_t i = 0; i < D_BFR_SZ; i++ )
-		data[ i ] = ( unsigned char ) 0;
-}
-
-
-int  ringBffrUsed( int  inIndex, int  outIndex, int  ringMask )  {
-	int  diff;
-
-	if( inIndex == outIndex )  return( ringMask );	/* if equal then circular buffer is deemed to be full */
-	else if(( diff = ( inIndex - outIndex )) > 0 )  return( diff - 1 );
-	else return( diff + ringMask );
 }
 
 
@@ -190,7 +139,7 @@ int  conv( struct config *  cfg, FILE *  fp, FILE *  ofp ) {
 	int  outIndex = D_BFR_SZ - 1;		/* output index for ring buffer */
 
 	requiredDataBytesPerLine = ( cfg->w.active) ? cfg->w.optionInt : REQLENGTH;
-	zeroRingBuffer( data );
+	zeroRingBffr( data, D_BFR_SZ );
 	while (( lineLen = getA_RecordFromInputSourceIntoStrBfr( fp, buffer, BFFR_SZ )) > 0 ) {	/* get line of characters from input source */
 		if( cfg->D.active )  fprintf( ofp, "\nDebug: %lu character line received\n", lineLen );
 		linePtr = buffer;
@@ -239,7 +188,8 @@ int  conv( struct config *  cfg, FILE *  fp, FILE *  ofp ) {
 						fprintf( ofp, "), %d data bytes and starting address 0x%04x\n", hdr.recordLength, hdr.recordAddress );
 					}
 					if(( recType == DATA_RECORD ) && ( dataLen > 0 ))  {
-						if( loadByteRingBuffer( cfg, recHdr->recordData, dataLen, data, &inIndex, &outIndex, D_BFR_MSK ) < dataLen ) {
+						if( loadRingBffrWithBytesFromLineOfAsciiHex(
+								recHdr->recordData, dataLen, data, &inIndex, &outIndex, D_BFR_MSK ) < dataLen ) {
 							fprintf( stderr, "Error: Unable to completely load circular buffer\n" );
 							errorIndicator = -1;
 						}
