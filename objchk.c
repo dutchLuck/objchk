@@ -1,7 +1,7 @@
 /*
  * O B J C H K . C
  *
- * Last Modified on Tue Jun 11 21:29:10 2024
+ * Last Modified on Sun Jan 12 17:52:43 2025
  *
  * Check the intel hex format object file.
  * Report any Checksum Errors and Short Records.
@@ -15,7 +15,7 @@
 #include <string.h>		/* strdup() */
 #include <libgen.h>		/* basename() */
 #include "config.h"		/* struct config */
-#include "intel.h"		/* conv() */
+#include "objFun.h"		/* conv() */
 
 #ifndef FALSE
 #define FALSE 0
@@ -39,9 +39,7 @@ void  cleanupStorage( void )  {
 int  main (int argc, char *  argv[])  {
   struct config  config;
   int indexToFirstNonConfig;
-#ifdef DEBUG
   int index;
-#endif
 
   /* Ensure any allocated memory is free'd */
 	atexit( cleanupStorage );
@@ -52,20 +50,22 @@ int  main (int argc, char *  argv[])  {
   /* set any configuration options that have been specified in the command line */
   indexToFirstNonConfig = setConfiguration( argc, argv, &config );
 
+  /* if -V specified then show version information */
+  if ( config.V.active || config.D.active )  printf( "objchk 0v0 (2025-01-12)\n");
   /* if -h specified then show the help/usage information and finish */
-  if ( config.h.active )  usage( &config, exeName );
-  else {
-#ifdef DEBUG
-    printf ("a.active = %d\nA.active = %d\n", config.a.active, config.A.active );
-    printf ("D.active = %d\nh.active = %d\n", config.D.active, config.h.active );
-    printf ("o.active = %d, o.optionStr = \"%s\"\nw.active = %d, w.optionInt = %d\n",
+  if ( config.D.active ) {
+    printf ("Debug: a.active = %d\nDebug: A.active = %d\n", config.a.active, config.A.active );
+    printf ("Debug: D.active = %d\nDebug: h.active = %d\n", config.D.active, config.h.active );
+    printf ("Debug: o.active = %d, o.optionStr = \"%s\"\nDebug: w.active = %d, w.optionInt = %d\n",
       config.o.active, config.o.optionStr, config.w.active, config.w.optionInt );
     for ( index = indexToFirstNonConfig; index < argc; index++)
-      printf ("Non-option argument ( %d ): \"%s\"\n", index, argv[index]);
-#endif
-	/* Attempt to dump Hex and Ascii and return 0 if successful */
-	return( processNonConfigCommandLineParameters( &config, indexToFirstNonConfig, argc - 1, argv ));
+      printf ("Debug: Non-option argument ( %d ): \"%s\"\n", index, argv[index]);
   }
+  /* Print the help and usage information */
+  if ( config.h.active )  usage( &config, exeName );
+	else
+  	/* Attempt to dump Hex and Ascii and return 0 if successful */
+    return( processNonConfigCommandLineParameters( &config, indexToFirstNonConfig, argc - 1, argv ));
   return 0;
 }
 

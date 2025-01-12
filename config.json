@@ -1,0 +1,81 @@
+{
+	"address": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "a",
+		"long": "no_address",
+		"help": "...... disable address output mode"
+	},
+	"ascii": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "A",
+		"long": "no_ascii",
+		"help": "...... disable ascii output mode"
+	},
+	"debug": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "D",
+		"long": "debug",
+		"help": "...... enable debug output mode"
+	},
+	"help": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "h",
+		"long": "help",
+		"help": "...... this help / usage information"
+	},
+	"intel": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "i",
+		"long": "intel",
+		"help": "...... expect intel object format - not implemented yet"
+	},
+	"motorola": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "m",
+		"long": "motorola",
+		"help": "...... expect motorola object format - not implemented yet"
+	},
+	"output": {
+		"type": "optStr",
+		"default": "",
+		"short": "o",
+		"long": "output_file",
+		"help": "TXT .. send the output to a file named 'TXT'"
+	},
+	"space": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "s",
+		"long": "space",
+		"help": "...... enable space as a printable character in the output"
+	},
+	"verbose": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "v",
+		"long": "verbose",
+		"help": "...... enable more verbose information output"
+	},
+	"version": {
+		"type": "optFlg",
+		"default": "false",
+		"short": "V",
+		"long": "version",
+		"help": "...... enable version information output"
+	},
+	"width": {
+		"type": "optInt",
+		"default": 16,
+		"short": "w",
+		"long": "width",
+		"most_pos_limit": 32,
+		"most_neg_limit": 1,
+		"help": "INT .. output INT bytes per line - where 1 <= INT <= 32"
+	}
+}

@@ -63,21 +63,21 @@ fa50 8d 06 1f a9 e7 e4 20 e1 8d 18 24 05 81 18 26 02 ...... ...$...&.
 ++++++++++ Shell got Return code number 0 for File with spaces shown in the ASCII column++++++++++
 
 ++++++++++ objchk truncated1.hex  +++Missing checksum byte check++++++++++
-Error: Input line ":20F820000DA6A0A7805A26F9318DF7D48E20FEACA12602ADA43584328D67168DC34F1F8BC" is too short (74) - needs 75 characters
+Error: Input Record ":20F820000DA6A0A7805A26F9318DF7D48E20FEACA12602ADA43584328D67168DC34F1F8BC" is too short (74) - needs 75 characters
 f800 30 8d 67 be 1f 10 1f 8b 97 9d 33 84 31 8c 35 ef 0.g.......3.1.5.
 f810 81 c6 16 34 04 1f 20 e3 a1 ed 81 6a e4 26 f6 c6 ...4.......j.&..
 ++++++++++ Shell got Return code number 1 for File truncated1.hex++++++++++
 
 ++++++++++ objchk truncated2.hex  +++Incorrect length record check++++++++++
-Error: Input line ":20F80000308D67BE1F8B979D3384318C35EF81C61634041F20E3A1ED816AE426F6C66B" is too short (71) - needs 75 characters
+Error: Input Record ":20F80000308D67BE1F8B979D3384318C35EF81C61634041F20E3A1ED816AE426F6C66B" is too short (71) - needs 75 characters
 ++++++++++ Shell got Return code number 1 for File truncated2.dat++++++++++
 
 ++++++++++ objchk truncated3.hex  +++Incorrect length record check++++++++++
-Error: Input line ":20F80000308D67BE1F8B979D3384318C35EF81C61634041F20E3A1ED816AE426F6C66B" is too short (71) - needs 75 characters
+Error: Input Record ":20F80000308D67BE1F8B979D3384318C35EF81C61634041F20E3A1ED816AE426F6C66B" is too short (71) - needs 75 characters
 ++++++++++ Shell got Return code number 1 for File truncated3.da++++++++++
 
 ++++++++++ objchk checkSumErr.hex  +++Checksum Error record check++++++++++
-Error: Input line ":100110002146017E17C20F01FF5F16002148011928" has checksum (0x0f) failure
+Error: Input Record ":100110002146017E17C20F01FF5F16002148011928" has checksum (0x0f) failure
 0100 21 46 01 36 01 21 47 01 36 00 7e fe 09 d2 19 01 !F.6.!G.6.~.....
 0110 21 46 01 7e 17 c2 0f 01 ff 5f 16 00 21 48 01 19 !F.~....._..!H..
 0120 19 4e 79 23 46 23 96 57 78 23 9e da 3f 01 b2 ca .Ny#F#.Wx#..?...
@@ -89,7 +89,7 @@ Error: Input line ":100110002146017E17C20F01FF5F16002148011928" has checksum (0x
 0110 21 46 01 7e 17 c2 00 01 ff 5f 16 00 21 48 01 19 !F.~....._..!H..
 0120 19 4e 79 23 46 23 96 57 78 23 9e da 3f 01 b2 ca .Ny#F#.Wx#..?...
 0130 3f 01 56 70 2b 5e 71 2b 72 2b 73 21 46 01 34 21 ?.Vp+^q+r+s!F.4!
-Error: Input line ":100110002146017E17C20F01FF5F16002148011928" has checksum (0x0f) failure
+Error: Input Record ":100110002146017E17C20F01FF5F16002148011928" has checksum (0x0f) failure
 0100 21 46 01 36 01 21 47 01 36 00 7e fe 09 d2 19 01 !F.6.!G.6.~.....
 0110 21 46 01 7e 17 c2 0f 01 ff 5f 16 00 21 48 01 19 !F.~....._..!H..
 0120 19 4e 79 23 46 23 96 57 78 23 9e da 3f 01 b2 ca .Ny#F#.Wx#..?...
