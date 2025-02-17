@@ -1,7 +1,7 @@
 /*
  * C O N F I G . H
  *
- * Last Modified on Wed Jul 31 13:26:36 2024
+ * Last Modified on Mon Oct  7 15:16:03 2024
  *
  */
 
@@ -67,23 +67,27 @@ struct optDbl {
   double optionDbl;
 };
 
+// Command Line Options Configuration Data
 struct config {
-  struct optFlg  a;
-  struct optFlg  A;
-  struct optFlg  D;
-  struct optFlg  h;
-  struct optFlg  i;
-  struct optFlg  m;
-  struct optStr  o;
-  struct optFlg  s;
-  struct optFlg  v;
-  struct optInt  w;
+  struct optFlg a;  /* (no_address) ...... disable address output mode */
+  struct optFlg A;  /* (no_ascii) ...... disable ascii output mode */
+  struct optFlg D;  /* (debug) ...... enable debug output mode */
+  struct optFlg h;  /* (help) ...... this help / usage information */
+  struct optFlg i;  /* (intel) ...... expect intel object format - not implemented yet */
+  struct optFlg m;  /* (motorola) ...... expect motorola object format - not implemented yet */
+  struct optStr o;  /* (output_file) TXT .. send the output to a file named 'TXT' */
+  struct optFlg s;  /* (space) ...... enable space as a printable character in the output */
+  struct optFlg v;  /* (verbose) ...... enable more verbose information output */
+  struct optFlg V;  /* (version) ...... enable version information output */
+  struct optInt w;  /* (width) INT .. output INT bytes per line - where 1 <= INT <= 32 */
 };
 
-#define OPTIONS "aADhimo:svw:"
+// getopt() option string
+#define OPTIONS "aADhimo:svVw:"
 
 void  usage ( struct config *  optStructPtr, char *  exeName );
 void  initConfiguration ( struct config *  optStructPtr );
 int  setConfiguration ( int  argc, char *  argv[], struct config *  optStructPtr );
+void  configuration_status( struct config *  opt );
 
 #endif

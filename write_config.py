@@ -2,7 +2,7 @@
 # 
 # W R I T E _ C O N F I G . P Y
 #
-# Last Modified on Sun Jan 12 17:52:49 2025
+# Last Modified on Mon Feb 17 11:40:10 2025
 #
 # Read information about command line options from a json file
 # and write config files to partially automate the command
@@ -29,17 +29,18 @@ def obtain_usage(data):
     lines_usage.append('  printf( "Usage:\\n");')
     shorts.append('  printf( " %s ')
     for value in data.values():
-        if value.get('type') == 'optFlg':
+        config_type = value.get('type')
+        if config_type == 'optFlg':
             shorts.append(f"[-{value.get('short', '')}]")
-        elif value.get('type') == 'optInt':
+        elif config_type == 'optInt':
             shorts.append(f"[-{value.get('short', '')} INT]")
-        elif value.get('type') == 'optStr':
+        elif config_type == 'optStr':
             shorts.append(f"[-{value.get('short', '')} TXT]")
-        elif value.get('type') == 'optLng':
+        elif config_type == 'optLng':
             shorts.append(f"[-{value.get('short', '')} INT]")
-        elif value.get('type') == 'optDbl':
+        elif config_type == 'optDbl':
             shorts.append(f"[-{value.get('short', '')} DBL]")
-        elif value.get('type') == 'optChr':
+        elif config_type == 'optChr':
             shorts.append(f"[-{value.get('short', '')} CHR]")
         else:
             shorts.append(f"[-{value.get('short', '')}]")
@@ -49,6 +50,29 @@ def obtain_usage(data):
         short = value.get('short', 'N/A')
         lines_usage.append(f'  printf( " %s %s\\n", opt->{short}.optID, opt->{short}.helpStr ); /* {key} */')
     return lines_usage
+
+
+# Function to write Usage routine
+def obtain_debug_status(data):
+    lines_status = []
+
+    lines_status.append('void  configuration_status( struct config *  opt )  {')
+    for key, value in data.items():
+        short = value.get('short', 'N/A')
+        lines_status.append(f'  printf( "Debug: option -{short} is %sctive (-{short} %s)\\n", (opt->{short}.active) ? "a" : "ina", opt->{short}.helpStr); /* {key} */')
+        config_type = value.get('type')
+        if config_type == 'optInt':
+            lines_status.append(f'  printf( "Debug: option -{short} value is %d\\n", opt->{short}.optionInt); /* {key} */')
+        elif config_type == 'optStr':
+            lines_status.append(f'  printf( "Debug: option -{short} value is \\"%s\\"\\n", opt->{short}.optionStr); /* {key} */')
+        elif config_type == 'optLng':
+            lines_status.append(f'  printf( "Debug: option -{short} value is %ld\\n", opt->{short}.optionLng); /* {key} */')
+        elif config_type == 'optDbl':
+            lines_status.append(f'  printf( "Debug: option -{short} value is %lg\\n", opt->{short}.optionDbl); /* {key} */')
+        elif config_type == 'optChr':
+            lines_status.append(f'  printf( "Debug: option -{short} value is %c\\n", opt->{short}.optionChr); /* {key} */')
+    return lines_status
+
 
 # Function to write init configuration routine
 def init_config(data):
@@ -81,6 +105,7 @@ def init_config(data):
             lines_init.append(f'  opt->{short}.optionDbl = {value.get("default", "")};')
             lines_init.append(f'  opt->{short}.defaultVal = {value.get("default", "")};')
     return lines_init
+
 
 # Function to write set configuration routine
 def set_config(data):
@@ -132,6 +157,7 @@ def set_config(data):
     lines_set.append('  return( optind );')
     return lines_set
 
+
 # Function to create an option string for the header file
 def concatenate_shorts(data):
     shorts = []
@@ -142,6 +168,7 @@ def concatenate_shorts(data):
         else:
             shorts.append(value.get('short', ''))
     return ''.join(shorts) + '"'
+
 
 # Function to create a config struct for the header file
 def extract_type_and_short(data):
@@ -159,13 +186,17 @@ lines2 = extract_type_and_short(json_data)
 lines3 = obtain_usage(json_data)
 lines4 = init_config(json_data)
 lines5 = set_config(json_data)
+lines6 = obtain_debug_status(json_data)
+
 
 with open('config.c', 'a') as config_c_file:
     config_c_file.write("\n// Functions for Command Line Options Configuration from JSON Data\n")
     config_c_file.write("\n".join(lines3) + "\n}\n\n")
     config_c_file.write("\n".join(lines4) + "\n}\n\n")
-    config_c_file.write("\n".join(lines5) + "\n}\n")
- 
+    config_c_file.write("\n".join(lines5) + "\n}\n\n")
+    config_c_file.write("\n".join(lines6) + "\n}\n")
+
+
 with open('config.h', 'a') as config_h_file:
     config_h_file.write("\n// Command Line Options Configuration Data\n")
     config_h_file.write("\n".join(lines2) + "\n};\n")
@@ -173,4 +204,5 @@ with open('config.h', 'a') as config_h_file:
     config_h_file.write("\nvoid  usage ( struct config *  optStructPtr, char *  exeName );\n")
     config_h_file.write("void  initConfiguration ( struct config *  optStructPtr );\n")
     config_h_file.write("int  setConfiguration ( int  argc, char *  argv[], struct config *  optStructPtr );\n")
+    config_h_file.write("void  configuration_status( struct config *  opt );\n")
     config_h_file.write("\n#endif\n")

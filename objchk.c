@@ -1,7 +1,7 @@
 /*
  * O B J C H K . C
  *
- * Last Modified on Sun Jan 12 17:52:43 2025
+ * Last Modified on Mon Feb 17 11:38:21 2025
  *
  * Check the intel hex format object file.
  * Report any Checksum Errors and Short Records.
@@ -51,15 +51,13 @@ int  main (int argc, char *  argv[])  {
   indexToFirstNonConfig = setConfiguration( argc, argv, &config );
 
   /* if -V specified then show version information */
-  if ( config.V.active || config.D.active )  printf( "objchk 0v0 (2025-01-12)\n");
+  if ( config.V.active || config.D.active )  printf( "objchk 0v0 (2025-02-17)\n");
   /* if -h specified then show the help/usage information and finish */
   if ( config.D.active ) {
-    printf ("Debug: a.active = %d\nDebug: A.active = %d\n", config.a.active, config.A.active );
-    printf ("Debug: D.active = %d\nDebug: h.active = %d\n", config.D.active, config.h.active );
-    printf ("Debug: o.active = %d, o.optionStr = \"%s\"\nDebug: w.active = %d, w.optionInt = %d\n",
-      config.o.active, config.o.optionStr, config.w.active, config.w.optionInt );
+    configuration_status( &config );  /* show status of each configuration option */
     for ( index = indexToFirstNonConfig; index < argc; index++)
       printf ("Debug: Non-option argument ( %d ): \"%s\"\n", index, argv[index]);
+    fflush( stdout);
   }
   /* Print the help and usage information */
   if ( config.h.active )  usage( &config, exeName );

@@ -46,11 +46,11 @@ echo "$OBJ: $SRC $HDR1 $HDR2" >> $OP_FILE_NAME
 echo -e "\t$COMPILER $OPTIONS -c -UDEBUG "'$<' >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
-echo "$SRC1: $NAME1.json proto.c" >> $OP_FILE_NAME
+echo "$SRC1: $NAME1.json proto.c write_config.py" >> $OP_FILE_NAME
 echo -e "\tpython3 write_config.py" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
-echo "$HDR1: $NAME1.json proto.h" >> $OP_FILE_NAME
+echo "$HDR1: $NAME1.json proto.h write_config.py" >> $OP_FILE_NAME
 echo -e "\tpython3 write_config.py" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #

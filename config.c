@@ -13,7 +13,7 @@
 #include <float.h>    /* DBL_MIN DBL_MAX */
 #include <string.h>   /* strchr() */
 #include "config.h"   /* struct config */
-#include "genFun.h"   /* convertOptionStringToInteger() */
+#include "genFun.h"   /* convertOptionStringToInteger() limitIntegerValueToEqualOrWithinRange() */
 
 
 int  configureIntegerOption( struct optInt *  intStructPtr, char *  intString ) {
@@ -46,69 +46,74 @@ int  configureDoubleOption( struct optDbl *  dblStructPtr, char *  dblString ) {
 }
 
 
+// Functions for Command Line Options Configuration from JSON Data
 void  usage( struct config *  opt, char *  exeName )  {
   printf( "Usage:\n");
-  printf( " %s [-a] [-A] [-D] [-h] [-o TXT] [-s] [-v] [-w INT][ fileName1 .. [ fileNameX ]]\n", exeName );
-  printf( " %s %s\n", opt->a.optID, opt->a.helpStr );
-  printf( " %s %s\n", opt->A.optID, opt->A.helpStr );
-  printf( " %s %s\n", opt->D.optID, opt->D.helpStr );
-  printf( " %s %s\n", opt->h.optID, opt->h.helpStr );
-  printf( " %s %s\n", opt->i.optID, opt->i.helpStr );
-  printf( " %s %s\n", opt->m.optID, opt->m.helpStr );
-  printf( " %s %s\n", opt->o.optID, opt->o.helpStr );
-  printf( " %s %s\n", opt->s.optID, opt->s.helpStr );
-  printf( " %s %s\n", opt->v.optID, opt->v.helpStr );
-  printf( " %s %s\n", opt->w.optID, opt->w.helpStr );
+  printf( " %s [-a][-A][-D][-h][-i][-m][-o TXT][-s][-v][-V][-w INT] [FILES]\n", exeName );
+  printf( " %s %s\n", opt->a.optID, opt->a.helpStr ); /* address */
+  printf( " %s %s\n", opt->A.optID, opt->A.helpStr ); /* ascii */
+  printf( " %s %s\n", opt->D.optID, opt->D.helpStr ); /* debug */
+  printf( " %s %s\n", opt->h.optID, opt->h.helpStr ); /* help */
+  printf( " %s %s\n", opt->i.optID, opt->i.helpStr ); /* intel */
+  printf( " %s %s\n", opt->m.optID, opt->m.helpStr ); /* motorola */
+  printf( " %s %s\n", opt->o.optID, opt->o.helpStr ); /* output */
+  printf( " %s %s\n", opt->s.optID, opt->s.helpStr ); /* space */
+  printf( " %s %s\n", opt->v.optID, opt->v.helpStr ); /* verbose */
+  printf( " %s %s\n", opt->V.optID, opt->V.helpStr ); /* version */
+  printf( " %s %s\n", opt->w.optID, opt->w.helpStr ); /* width */
 }
 
-
 void  initConfiguration ( struct config *  opt )  {
+// address: optFlg
   opt->a.active = FALSE;
   opt->a.optID = "-a";
   opt->a.helpStr = "...... disable address output mode";
-
+// ascii: optFlg
   opt->A.active = FALSE;
   opt->A.optID = "-A";
-  opt->A.helpStr = "...... disable ASCII output mode";
-
+  opt->A.helpStr = "...... disable ascii output mode";
+// debug: optFlg
   opt->D.active = FALSE;
   opt->D.optID = "-D";
-  opt->D.helpStr = "...... enable Debug output mode";
-
+  opt->D.helpStr = "...... enable debug output mode";
+// help: optFlg
   opt->h.active = FALSE;
   opt->h.optID = "-h";
-  opt->h.helpStr = "...... this help/usage information";
-
+  opt->h.helpStr = "...... this help / usage information";
+// intel: optFlg
   opt->i.active = FALSE;
   opt->i.optID = "-i";
   opt->i.helpStr = "...... expect intel object format - not implemented yet";
-
+// motorola: optFlg
   opt->m.active = FALSE;
   opt->m.optID = "-m";
   opt->m.helpStr = "...... expect motorola object format - not implemented yet";
-
+// output: optStr
   opt->o.active = FALSE;
   opt->o.optID = "-o";
-  opt->o.helpStr = "TXT .. output the dump to an output file named \"TXT\" ";
+  opt->o.helpStr = "TXT .. send the output to a file named 'TXT'";
   opt->o.optionStr = "";
-
+// space: optFlg
   opt->s.active = FALSE;
   opt->s.optID = "-s";
   opt->s.helpStr = "...... enable space as a printable character in the output";
-
+// verbose: optFlg
   opt->v.active = FALSE;
   opt->v.optID = "-v";
   opt->v.helpStr = "...... enable more verbose information output";
-
+// version: optFlg
+  opt->V.active = FALSE;
+  opt->V.optID = "-V";
+  opt->V.helpStr = "...... enable version information output";
+// width: optInt
   opt->w.active = FALSE;
   opt->w.optID = "-w";
   opt->w.helpStr = "INT .. output INT bytes per line - where 1 <= INT <= 32";
   opt->w.mostPosLimit = 32;
   opt->w.mostNegLimit = 1;
+  opt->w.optionInt = 16;
   opt->w.defaultVal = 16;
-  opt->w.optionInt = opt->w.defaultVal;
 }
-
 
 int  setConfiguration ( int  argc, char *  argv[], struct config *  opt )  {
   int c;
@@ -116,29 +121,48 @@ int  setConfiguration ( int  argc, char *  argv[], struct config *  opt )  {
   opterr = 0;
   while ((c = getopt (argc, argv, OPTIONS )) != -1 ) {
     switch ( c ) {
-      case 'a': opt->a.active = TRUE; break;
-      case 'A': opt->A.active = TRUE; break;
-      case 'D': opt->D.active = TRUE; break;
-      case 'h': opt->h.active = TRUE; break;
-      case 'i': opt->i.active = TRUE; break;
-      case 'm': opt->m.active = TRUE; break;
-      case 'o': opt->o.active = TRUE; opt->o.optionStr = optarg; break;
-      case 's': opt->s.active = TRUE; break;
-      case 'v': opt->v.active = TRUE; break;
-      case 'w': configureIntegerOption( &opt->w, optarg ); break;
-      case '?': {
+      case 'a': opt->a.active = TRUE; break; /* no_address */
+      case 'A': opt->A.active = TRUE; break; /* no_ascii */
+      case 'D': opt->D.active = TRUE; break; /* debug */
+      case 'h': opt->h.active = TRUE; break; /* help */
+      case 'i': opt->i.active = TRUE; break; /* intel */
+      case 'm': opt->m.active = TRUE; break; /* motorola */
+      case 'o': opt->o.active = TRUE; opt->o.optionStr = optarg; break; /* output_file */
+      case 's': opt->s.active = TRUE; break; /* space */
+      case 'v': opt->v.active = TRUE; break; /* verbose */
+      case 'V': opt->V.active = TRUE; break; /* version */
+      case 'w': configureIntegerOption( &opt->w, optarg ); break; /* width */
+      case '?' : {
         if ( strchr( "ow", optopt ) != NULL ) {
           fprintf (stderr, "Error: Option -%c requires an argument.\n", optopt);
-          if ( optopt == 'o' )  opt->o.active = FALSE;
-          if ( optopt == 'w' )  opt->w.active = FALSE;
+          switch ( optopt ) {
+            case 'o': opt->o.active = FALSE; break;
+            case 'w': opt->w.active = FALSE; break;
+          }
         }
         else if (isprint (optopt))
-          fprintf (stderr, "Warning: Unknown option \"-%c\".\n", optopt);
+          fprintf (stderr, "Warning: Unknown option \"-%c\" ? - ignoring it!\n", optopt);
         else
-          fprintf (stderr, "Warning: Unknown option character `\\x%x'.\n", optopt);
+          fprintf (stderr, "Warning: Unknown non-printable option character 0x%x ? - ignoring it!\n", optopt);
         break;
       }
     }
   }
   return( optind );
+}
+
+void  configuration_status( struct config *  opt )  {
+  printf( "Debug: option -a is %sctive (-a %s)\n", (opt->a.active) ? "a" : "ina", opt->a.helpStr); /* address */
+  printf( "Debug: option -A is %sctive (-A %s)\n", (opt->A.active) ? "a" : "ina", opt->A.helpStr); /* ascii */
+  printf( "Debug: option -D is %sctive (-D %s)\n", (opt->D.active) ? "a" : "ina", opt->D.helpStr); /* debug */
+  printf( "Debug: option -h is %sctive (-h %s)\n", (opt->h.active) ? "a" : "ina", opt->h.helpStr); /* help */
+  printf( "Debug: option -i is %sctive (-i %s)\n", (opt->i.active) ? "a" : "ina", opt->i.helpStr); /* intel */
+  printf( "Debug: option -m is %sctive (-m %s)\n", (opt->m.active) ? "a" : "ina", opt->m.helpStr); /* motorola */
+  printf( "Debug: option -o is %sctive (-o %s)\n", (opt->o.active) ? "a" : "ina", opt->o.helpStr); /* output */
+  printf( "Debug: option -o value is \"%s\"\n", opt->o.optionStr); /* output */
+  printf( "Debug: option -s is %sctive (-s %s)\n", (opt->s.active) ? "a" : "ina", opt->s.helpStr); /* space */
+  printf( "Debug: option -v is %sctive (-v %s)\n", (opt->v.active) ? "a" : "ina", opt->v.helpStr); /* verbose */
+  printf( "Debug: option -V is %sctive (-V %s)\n", (opt->V.active) ? "a" : "ina", opt->V.helpStr); /* version */
+  printf( "Debug: option -w is %sctive (-w %s)\n", (opt->w.active) ? "a" : "ina", opt->w.helpStr); /* width */
+  printf( "Debug: option -w value is %d\n", opt->w.optionInt); /* width */
 }
