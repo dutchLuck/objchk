@@ -1,13 +1,15 @@
 /*
  *  O B J F U N . C
  *
- * last modified on Wed Jul 31 13:22:02 2024, by O.F.H.
+ * last modified on Mon Jun 16 12:15:45 2025, by O.F.H.
  *
  * Code to neatly list an Intel Hex format file
  * and check the checksums while doing the listing.
  *
  * written by O.Holland
  *
+ * Fixed compile error when DEBUG is active
+ * 
  */
 
 #include <stdio.h>
@@ -59,7 +61,7 @@ int  calcCheckSum( unsigned char  ringBffr[], int  inIndex, int  dataLen, int  c
 }
 
 
-void  printDataAsHex( struct config *  cfg, FILE *  ofp, unsigned char  dataBfr[],
+void  printDataAsHex( FILE *  ofp, unsigned char  dataBfr[],
 	int  outIndx, int  circMsk, int  dataCnt ) {
 	for( outIndx = (( outIndx + 1 ) & circMsk ); dataCnt-- > 0; outIndx = (( outIndx + 1 ) & circMsk )) {
 		fprintf( ofp, "%02x ", dataBfr[ outIndx ] );
@@ -81,7 +83,7 @@ void  printDataAsChr( struct config *  cfg, FILE *  ofp, unsigned char  dataBfr[
 
 
 size_t  getAnIntelRecordFromInputSourceIntoStrBfr( FILE *  fp, char *  chrBfr, int  chrBfrLen ) {
-	size_t  numOfChrInBfr = 0;
+	int  numOfChrInBfr = 0;
 	int  chr;
 
 	if( --chrBfrLen < 9 )	/* pre-decrement to account for string terminator and there are 9 char in the record header */
@@ -102,12 +104,12 @@ size_t  getAnIntelRecordFromInputSourceIntoStrBfr( FILE *  fp, char *  chrBfr, i
 			*chrBfr = '\0';		/* terminate string */
 		}
 	}	/* end of if enough storage space available */
-	return( numOfChrInBfr );
+	return( (size_t) numOfChrInBfr );
 }
 
 
 size_t  getA_MotorolaRecordFromInputSourceIntoStrBfr( FILE *  fp, char *  chrBfr, int  chrBfrLen ) {
-	size_t  numOfChrInBfr = 0;
+	int  numOfChrInBfr = 0;
 	int  chr;
 
 	if( --chrBfrLen < 9 )	/* pre-decrement to account for string terminator and there are 9 char in the record header */
@@ -128,7 +130,7 @@ size_t  getA_MotorolaRecordFromInputSourceIntoStrBfr( FILE *  fp, char *  chrBfr
 			*chrBfr = '\0';		/* terminate string */
 		}
 	}	/* end of if enough storage space available */
-	return( numOfChrInBfr );
+	return( (size_t) numOfChrInBfr );
 }
 
 
@@ -146,7 +148,7 @@ size_t  getA_RecordFromInputSourceIntoStrBfr( struct config *  cfg, FILE *  fp, 
 void  printData( struct config *  cfg, FILE *  ofp, unsigned char  dataBfr[],
 	int  outIndx, int  ringBfrMsk, int  dataCnt, int  address ) {
 	if( ! cfg->a.active )  fprintf( ofp, "%04x ", address & 0xffff );
-	printDataAsHex( cfg, ofp, dataBfr, outIndx, ringBfrMsk, dataCnt );	/* output a Hex data */
+	printDataAsHex( ofp, dataBfr, outIndx, ringBfrMsk, dataCnt );	/* output a Hex data */
 	if( ! cfg->A.active )
 		printDataAsChr( cfg, ofp, dataBfr, outIndx, ringBfrMsk, dataCnt );	/* output a Char data */
 	fprintf( ofp, "\n" );
@@ -208,7 +210,7 @@ int  conv( struct config *  cfg, FILE *  fp, FILE *  ofp ) {
 				dataLen = convert2HexChrNibblesToInt( recHdr->recordLength );
 				hdr.recordLength = ( unsigned char )( dataLen & 0xff );
 				if( cfg->D.active )  fprintf( ofp, "Debug: Data Length 0x%02x ( %d ) bytes.\n", dataLen, dataLen );
-				if( recLineLenInBuffer < ( 2 * dataLen + 11 ))	{	/* 9 header nibbles + 2 checksum nibbles + data */
+				if( recLineLenInBuffer < (size_t) ( 2 * dataLen + 11 ))	{	/* 9 header nibbles + 2 checksum nibbles + data */
 					fprintf( stderr, "Error: Input Record \"%s\" is too short (%zu) - needs %d characters\n",
 						recStrtInBuffer, recLineLenInBuffer, ( 2 * dataLen + 11 ));
 					errorIndicator = -1;
@@ -244,7 +246,7 @@ int  conv( struct config *  cfg, FILE *  fp, FILE *  ofp ) {
 		if( cfg->D.active ) {
 			fprintf( ofp, "Debug: %d data storage locations used\n", ringBffrUsed( inIndex, outIndex, D_BFR_MSK ));
 #ifdef DEBUG
-			dumpRingBuffer( data );
+			dumpRingBffr( data, D_BFR_SZ );
 #endif
 		}
 		/* Output lines of data of the required width until there is less than a full width line left in the buffer */

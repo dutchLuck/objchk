@@ -1,7 +1,7 @@
 /*
  * O B J C H K . C
  *
- * Last Modified on Mon Feb 17 11:38:21 2025
+ * Last Modified on Mon Jun 16 11:29:52 2025
  *
  * Check the intel hex format object file.
  * Report any Checksum Errors and Short Records.
@@ -164,4 +164,3 @@ int  processNonConfigCommandLineParameters( struct config *  cfg, int  frstIndx,
   }
   return( returnVal );
 }
-

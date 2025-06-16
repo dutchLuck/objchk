@@ -13,7 +13,7 @@ NAME3=objFun
 #
 OP_FILE_NAME=Makefile
 COMPILER=cc
-OPTIONS="-Wall -pedantic"
+OPTIONS="-Wall -pedantic -Wextra"
 LNK_OPTIONS=""
 TRGT=$NAME
 SRC=$NAME.c
