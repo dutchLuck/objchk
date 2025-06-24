@@ -1,8 +1,9 @@
 /*
  * C O N F I G . C
  *
- * Last Modified on Wed Jul 31 13:25:15 2024
+ * Last Modified on Mon Jun 23 19:14:05 2025
  *
+ * 2025-Jun-22 Added Chr option handling
  */
 
 #include <stdio.h>    /* printf() */
@@ -46,10 +47,42 @@ int  configureDoubleOption( struct optDbl *  dblStructPtr, char *  dblString ) {
 }
 
 
+int  configureChrOption( struct optChr *  chrStructPtr, char *  chrString )  {
+  size_t  len;
+
+  len = strlen( chrString );
+  chrStructPtr->active = TRUE;
+  chrStructPtr->optionChr = ( int ) *chrString;
+  if (( *chrString == '\\' ) && ( len > ( size_t ) 1 ) && ( chrString[ 1 ] != '\\'))  {
+    switch ( chrString[ 1 ] )  {
+      case '0' : chrStructPtr->optionChr = '\0'; break;   /* NULL */
+      case 'a' : chrStructPtr->optionChr = '\a'; break;   /* audible bell */
+      case 'b' : chrStructPtr->optionChr = '\b'; break;   /* backspace */
+      case 'f' : chrStructPtr->optionChr = '\f'; break;   /* form-feed */
+      case 'n' : chrStructPtr->optionChr = '\n'; break;   /* newline */
+      case 'r' : chrStructPtr->optionChr = '\r'; break;   /* carriage return */
+      case 't' : chrStructPtr->optionChr = '\t'; break;   /* horizontal tab */
+      case 'x' :
+      case 'X' : {
+        if ( len > ( size_t ) 3 )  {
+          chrStructPtr->optionChr = convert2HexChrNibblesToInt( chrString + 2 );
+        }
+        else if ( len > ( size_t ) 2 )  {
+          chrStructPtr->optionChr = convertHexChrNibbleToInt( chrString + 2 );
+        }
+        break;
+      }
+      default :  chrStructPtr->optionChr = ','; break;    /* reinstate comma */
+    }
+    chrStructPtr->optionChr = limitIntegerValueToEqualOrWithinRange( chrStructPtr->optionChr , 0, 127 );
+  }
+  return( chrStructPtr->active );
+}
+
 // Functions for Command Line Options Configuration from JSON Data
 void  usage( struct config *  opt, char *  exeName )  {
   printf( "Usage:\n");
-  printf( " %s [-a][-A][-D][-h][-i][-m][-o TXT][-s][-v][-V][-w INT] [FILES]\n", exeName );
+  printf( " %s [-a][-A][-D][-h][-i][-m][-o TXT][-s][-v][-V][-w INT]\n", exeName );
   printf( " %s %s\n", opt->a.optID, opt->a.helpStr ); /* address */
   printf( " %s %s\n", opt->A.optID, opt->A.helpStr ); /* ascii */
   printf( " %s %s\n", opt->D.optID, opt->D.helpStr ); /* debug */
@@ -164,5 +197,5 @@ void  configuration_status( struct config *  opt )  {
   printf( "Debug: option -v is %sctive (-v %s)\n", (opt->v.active) ? "a" : "ina", opt->v.helpStr); /* verbose */
   printf( "Debug: option -V is %sctive (-V %s)\n", (opt->V.active) ? "a" : "ina", opt->V.helpStr); /* version */
   printf( "Debug: option -w is %sctive (-w %s)\n", (opt->w.active) ? "a" : "ina", opt->w.helpStr); /* width */
-  printf( "Debug: option -w value is %d\n", opt->w.optionInt); /* width */
+  printf( "Debug: option -w value is %d, limits: %d .. %d\n", opt->w.optionInt, opt->w.mostNegLimit, opt->w.mostPosLimit); /* width */
 }
